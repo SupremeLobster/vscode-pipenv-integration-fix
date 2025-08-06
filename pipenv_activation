@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # VSCODE_FIX_BEGIN
 # Check if the "pipenv" command is available
 if command -v pipenv &> /dev/null; then
