@@ -1,0 +1,34 @@
+# VSCODE_FIX_BEGIN
+# Check if the "pipenv" command is available
+if command -v pipenv &> /dev/null; then
+  # Check if we are inside "9999-VectorSearchApi"
+  if [[ "$(basename "$PWD")" == "9999-VectorSearchApi" ]]; then
+    if [[ -d "flask-server" ]]; then
+      export PARENT_PWD="$PWD"
+      cd flask-server
+    fi
+  fi
+
+  pipenv_venv_output=$(pipenv -q --venv)
+
+  # Only activate pipenv shell if a Pipenv exists for the current directory
+  if echo "$pipenv_venv_output" | grep -vq "No virtualenv has been created"; then
+    # Append "clear" command to the end of the "activate" script of the current pipenv, but only if it doesn't already exist
+    if ! grep -q "clear" "$pipenv_venv_output/bin/activate"; then
+      # Check if PARENT_PWD is set
+      if [[ -n "$PARENT_PWD" ]]; then
+        echo '# Check if PARENT_PWD is set and different from current $PWD' >> "$pipenv_venv_output/bin/activate"
+        echo 'if [ -n "${PARENT_PWD-}" ] && [ "$PWD" != "$PARENT_PWD" ]; then' >> "$pipenv_venv_output/bin/activate"
+        echo '    cd "$PARENT_PWD"' >> "$pipenv_venv_output/bin/activate"
+        echo 'fi' >> "$pipenv_venv_output/bin/activate"
+      fi
+      echo "" >> "$pipenv_venv_output/bin/activate"  # Ensure we append a newline before the new command
+      echo "clear" >> "$pipenv_venv_output/bin/activate"
+    fi
+    pipenv -q shell
+    exit
+  else
+    clear
+  fi
+fi
+# VSCODE_FIX_END

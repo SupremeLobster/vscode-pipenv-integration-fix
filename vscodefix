@@ -1,0 +1,37 @@
+#!/bin/bash
+
+apply_cd_dot_fix() {
+    local target_dir="$1"
+    cd "$target_dir" 2>/dev/null
+    if [ $? -ne 0 ]; then
+        echo "Could not find the directory: $target_dir"
+        return 1
+    fi
+
+    if ! grep -q "VSCODE_FIX_BEGIN" shellIntegration-bash.sh; then
+        echo "" >> shellIntegration-bash.sh  # Make sure we append a newline before the new command
+        echo "" >> shellIntegration-bash.sh  # Make sure we append a newline before the new command
+        cat "$(which pipenv_activation)" >> shellIntegration-bash.sh
+        echo "Applied fix"
+    else
+        # Replace the block between VSCODE_FIX_BEGIN and VSCODE_FIX_END, but do NOT duplicate the markers
+        awk -v fix="$(awk '/# VSCODE_FIX_BEGIN/,/# VSCODE_FIX_END/' "$(which pipenv_activation)" | sed '1d;$d')" '
+            BEGIN {in_block=0}
+            /# VSCODE_FIX_BEGIN/ {print; print fix; in_block=1; next}
+            /# VSCODE_FIX_END/ {in_block=0; print; next}
+            {if(!in_block) print}
+        ' shellIntegration-bash.sh > shellIntegration-bash.sh.tmp && mv shellIntegration-bash.sh.tmp shellIntegration-bash.sh
+        echo "Applied fix (replaced block)"
+    fi
+}
+
+# Apply the fix to the shellIntegration-bash.sh file
+win_user=$(ls -d /mnt/c/Users/*/AppData/Local/Programs/Microsoft\ VS\ Code 2>/dev/null | head -n 1 | cut -d'/' -f5)
+echo "Detected Windows user: $win_user"
+apply_cd_dot_fix "/mnt/c/Users/$win_user/AppData/Local/Programs/Microsoft VS Code/resources/app/out/vs/workbench/contrib/terminal/browser/media/" > /dev/null 2>&1
+apply_cd_dot_fix "/mnt/c/Users/$win_user/AppData/Local/Programs/Microsoft VS Code/resources/app/out/vs/workbench/contrib/terminal/common/scripts/"
+
+hash_folder=$(ls -d ~/.vscode-server/bin/*/ 2>/dev/null | head -n 1)
+if [ -n "$hash_folder" ]; then
+    apply_cd_dot_fix "${hash_folder}out/vs/workbench/contrib/terminal/common/scripts"
+fi
