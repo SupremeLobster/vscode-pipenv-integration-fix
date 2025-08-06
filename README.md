@@ -4,7 +4,7 @@ Copy both files to whatever directory you want, then add that directory to your 
 
 # Instructions
 
-Whenever VSCode stops automatically launching new terminals with the Pipenv virtual environment already open, simply run:
+Whenever VSCode stops automatically launching new terminals with the Pipenv virtual environment already open (usually happens after a VSCode update), simply run:
 
 ```bash
 vscodefix
