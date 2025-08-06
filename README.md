@@ -11,3 +11,5 @@ vscodefix
 ```
 
 from any WSL terminal, and the integration will start working again.
+
+Now, any new terminal you open inside VSCode will automatically launch inside a Pipenv shell, as expected.
