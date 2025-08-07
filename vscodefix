@@ -11,7 +11,7 @@ apply_cd_dot_fix() {
     if ! grep -q "VSCODE_FIX_BEGIN" shellIntegration-bash.sh; then
         echo "" >> shellIntegration-bash.sh  # Make sure we append a newline before the new command
         echo "" >> shellIntegration-bash.sh  # Make sure we append a newline before the new command
-        cat "$(which pipenv_activation)" >> shellIntegration-bash.sh
+        tail -n +3 "$(which pipenv_activation)" >> shellIntegration-bash.sh
         echo "Applied fix"
     else
         # Replace the block between VSCODE_FIX_BEGIN and VSCODE_FIX_END, but do NOT duplicate the markers
