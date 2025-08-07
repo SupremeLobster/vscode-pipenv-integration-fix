@@ -14,7 +14,7 @@ if command -v pipenv &> /dev/null; then
     pipenv_venv_output=$(pipenv -q --venv)
 
     # Only activate pipenv shell if a Pipenv exists for the current directory
-    if echo "$pipenv_venv_output" | grep -vq "No virtualenv has been created"; then
+    if [[ -n "$pipenv_venv_output" ]]; then
         # Append "clear" command to the end of the "activate" script of the current pipenv, but only if it doesn't already exist
         if ! grep -q "clear" "$pipenv_venv_output/bin/activate"; then
             # Check if PARENT_PWD is set
