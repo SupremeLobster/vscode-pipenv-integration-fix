@@ -28,7 +28,7 @@ if command -v pipenv &> /dev/null; then
             echo "clear" >> "$pipenv_venv_output/bin/activate"
         fi
         pipenv -q shell
-        exit
+        exit 0
     else
         clear
     fi
