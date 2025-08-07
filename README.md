@@ -1,6 +1,12 @@
 # Installation
 
-Copy both files to whatever directory you want, then add that directory to your PATH.
+1. Download `vscodefix` and `pipenv_activation` scripts:
+
+   [Latest `vscodefix` release](https://github.com/SupremeLobster/vscode-pipenv-integration-fix/releases/latest/download/vscodefix)
+   
+   [Latest `pipenv_activation` release](https://github.com/SupremeLobster/vscode-pipenv-integration-fix/releases/latest/download/pipenv_activation)
+
+3. Copy both files to whatever directory you want, then add that directory to your PATH.
 
 # Instructions
 
